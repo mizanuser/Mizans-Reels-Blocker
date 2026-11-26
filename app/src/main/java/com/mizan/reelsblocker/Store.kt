@@ -3,15 +3,16 @@ import android.content.Context
 import java.text.SimpleDateFormat
 import java.util.*
 
-data class Platform(val id: String, val name: String, val feature: String, val pkg: String, val keys: List<String>)
+/** ids = view-id fragments of the Reels screen. tabs = label of the Reels tab (matched only when that tab is selected). Both empty = block whole app. */
+data class Platform(val id: String, val name: String, val feature: String, val pkg: String, val ids: List<String>, val tabs: List<String>)
 
 object Platforms {
     val all = listOf(
-        Platform("fb", "Facebook", "Facebook Reels", "com.facebook.katana", listOf("reel")),
-        Platform("ig", "Instagram", "Instagram Reels", "com.instagram.android", listOf("clips_viewer")),
-        Platform("yt", "YouTube", "YouTube Shorts", "com.google.android.youtube", listOf("reel_recycler", "reel_player_page")),
-        Platform("tt", "TikTok", "TikTok Videos", "com.zhiliaoapp.musically", emptyList()),
-        Platform("sc", "Snapchat", "Snapchat Spotlight", "com.snapchat.android", listOf("spotlight"))
+        Platform("fb", "Facebook", "Facebook Reels", "com.facebook.katana", emptyList(), listOf("reels", "রিলস")),
+        Platform("ig", "Instagram", "Instagram Reels", "com.instagram.android", emptyList(), listOf("clips_tab", "reels")),
+        Platform("yt", "YouTube", "YouTube Shorts", "com.google.android.youtube", listOf("reel_recycler", "reel_player_page"), listOf("shorts")),
+        Platform("tt", "TikTok", "TikTok Videos", "com.zhiliaoapp.musically", emptyList(), emptyList()),
+        Platform("sc", "Snapchat", "Snapchat Spotlight", "com.snapchat.android", emptyList(), listOf("spotlight"))
     )
 }
 
