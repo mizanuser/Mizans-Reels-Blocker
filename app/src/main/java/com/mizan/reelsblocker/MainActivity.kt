@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -13,7 +14,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
@@ -33,8 +36,14 @@ class MainActivity : ComponentActivity() {
             val P = Color(0xFF7A3FF2)
             LazyColumn(Modifier.fillMaxSize().background(Color(0xFF140A2E)).statusBarsPadding().padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 item {
-                    Text("Mizan's Reels Blocker", color = Color.White, fontSize = 24.sp)
-                    Text("Block Reels. Save Time. Stay Focused.", color = Color(0xFFD9C8FF))
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Image(painterResource(R.mipmap.ic_launcher), null, Modifier.size(64.dp).clip(RoundedCornerShape(16.dp)))
+                        Spacer(Modifier.width(12.dp))
+                        Column {
+                            Text("Mizan's Reels Blocker", color = Color.White, fontSize = 22.sp)
+                            Text("Block Reels. Save Time. Stay Focused.", color = Color(0xFFD9C8FF), fontSize = 12.sp)
+                        }
+                    }
                 }
                 item {
                     Card(colors = CardDefaults.cardColors(P), shape = RoundedCornerShape(24.dp)) {
