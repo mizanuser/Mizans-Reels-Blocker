@@ -13,19 +13,27 @@ class BlockerService : AccessibilityService() {
         val now = SystemClock.elapsedRealtime()
         if (now - last < 1000) return
         val root = rootInActiveWindow ?: return
-        if (pl.keys.isEmpty() || hasId(root, pl.keys, 0)) {
+        val wholeApp = pl.ids.isEmpty() && pl.tabs.isEmpty()
+        if (wholeApp || hit(root, pl, 0)) {
             last = now
             Store.addBlock(this)
             performGlobalAction(GLOBAL_ACTION_BACK)
             startActivity(Intent(this, WarningActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP))
         }
     }
-    private fun hasId(n: AccessibilityNodeInfo?, keys: List<String>, depth: Int): Boolean {
+
+    private fun hit(n: AccessibilityNodeInfo?, pl: Platform, depth: Int): Boolean {
         if (n == null || depth > 25) return false
-        val id = n.viewIdResourceName
-        if (id != null && keys.any { id.contains(it, true) }) return true
-        for (i in 0 until n.childCount) if (hasId(n.getChild(i), keys, depth + 1)) return true
+        val id = n.viewIdResourceName?.lowercase() ?: ""
+        if (pl.ids.any { id.contains(it) }) return true
+        // Only the SELECTED tab counts, so normal feed/DM/profile are never blocked.
+        if (n.isSelected && pl.tabs.isNotEmpty()) {
+            val label = "$id ${n.contentDescription ?: ""} ${n.text ?: ""}".lowercase()
+            if (label.length < 80 && pl.tabs.any { label.contains(it) }) return true
+        }
+        for (i in 0 until n.childCount) if (hit(n.getChild(i), pl, depth + 1)) return true
         return false
     }
+
     override fun onInterrupt() {}
 }
